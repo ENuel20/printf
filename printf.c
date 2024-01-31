@@ -1,87 +1,57 @@
 #include "main.h"
 
 /**
- * _printf - prints the formatted string character by character
- * @format: format string
- * Return: num_chars, the number of characters in the string
+ * _printf - Print formatted output to stdout
+ * @format: The format string
+ *
+ * Return: The number of characters printed
  */
 int _printf(const char *format, ...)
 {
-	char buffer[BUFFER_SIZE];
-	int buffer_index = 0;
-	int num_chars = 0;
-	va_list arguments;
+    char buffer[BUFFER_SIZE];
+    int buffer_index = 0;
+    int num_chars = 0;
+    va_list arguments;
 
-	if (format == NULL)
-		return (-1);
+    if (format == NULL)
+        return -1;
 
-	va_start(arguments, format);
+    va_start(arguments, format);
 
-	while (*format)
-	{
-		if (*format == '%')
-		{
-			format++;
-			if (*format == 'c')
-			{
-				char c = va_arg(arguments, int);
-				buffer[buffer_index++] = c;
-			}
-			else if (*format == 's')
-			{
-				char *string = va_arg(arguments, char *);
-				int len = strlen(string);
-				memcpy(buffer + buffer_index, string, len);
-				buffer_index += len;
-			}
-			else if (*format == '%')
-			{
-				buffer[buffer_index++] = '%';
-			}
-			else if (*format == 'd' || *format == 'i' || *format == 'u' ||
-					*format == 'o' || *format == 'x' || *format == 'X')
-			{
-				long integer = 0;
-				if (*format == 'd' || *format == 'i')
-				{
-					integer = va_arg(arguments, int);
-				}
-				else if (*format == 'u')
-				{
-					integer = va_arg(arguments, unsigned int);
-				}
-				else if (*format == 'o')
-				{
-					integer = va_arg(arguments, unsigned int);
-					buffer_index += sprintf(buffer + buffer_index, "%o", integer);
-					continue;
-				}
-				else if (*format == 'x' || *format == 'X')
-				{
-					integer = va_arg(arguments, unsigned int);
-					buffer_index += sprintf(buffer + buffer_index, (*format == 'x') ? "%x" : "%X", integer);
-					continue;
-				}
+    while (*format)
+    {
+        if (*format == '%')
+        {
+            format++;
+            switch (*format)
+            {
+                case 'c': num_chars += print_character(buffer, &buffer_index, arguments); break;
+                case 's': num_chars += print_string(buffer, &buffer_index, arguments); break;
+                case 'd': case 'i': num_chars += print_integer(buffer, &buffer_index, arguments); break;
+                case 'o': num_chars += print_octal(buffer, &buffer_index, arguments); break;
+                case 'x': num_chars += print_hex(buffer, &buffer_index, arguments); break;
+                case 'X': num_chars += print_upper_hex(buffer, &buffer_index, arguments); break;
+                case '%': buffer[buffer_index++] = '%'; num_chars++; break;
+                default: break;
+            }
+        }
+        else
+        {
+            buffer[buffer_index++] = *format;
+            num_chars++;
+        }
 
-				buffer_index += sprintf(buffer + buffer_index, "%ld", integer);
-			}
-		}
-		else
-		{
-			buffer[buffer_index++] = *format;
-		}
+        if (buffer_index >= BUFFER_SIZE - 1 || *(format + 1) == '\0')
+        {
+            write(1, buffer, buffer_index);
+            num_chars += buffer_index;
+            buffer_index = 0;
+        }
 
-		if (buffer_index >= BUFFER_SIZE - 1 || *(format + 1) == '\0')
-		{
-			write(1, buffer, buffer_index);
-			num_chars += buffer_index;
-			buffer_index = 0;
-		}
+        format++;
+    }
 
-		format++;
-	}
-
-	va_end(arguments);
-	return (num_chars);
+    va_end(arguments);
+    return num_chars;
 }
 
