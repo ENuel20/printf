@@ -10,11 +10,13 @@
  */
 int print_string(char *buffer, int *buffer_index, va_list arguments)
 {
-    char *string = va_arg(arguments, char *);
-    int len = strlen(string);
-    memcpy(buffer + *buffer_index, string, len);
-    *buffer_index += len;
-    return len;
+	char *string = va_arg(arguments, char *);
+	int len = strlen(string);
+
+	memcpy(buffer + *buffer_index, string, len);
+	*buffer_index += len;
+
+	return (len);
 }
 
 /**
@@ -27,8 +29,9 @@ int print_string(char *buffer, int *buffer_index, va_list arguments)
  */
 int print_integer(char *buffer, int *buffer_index, va_list arguments)
 {
-    long integer = va_arg(arguments, int);
-    return sprintf(buffer + *buffer_index, "%ld", integer);
+	long integer = va_arg(arguments, int);
+
+	return (sprintf(buffer + *buffer_index, "%ld", integer));
 }
 
 /**
@@ -41,8 +44,9 @@ int print_integer(char *buffer, int *buffer_index, va_list arguments)
  */
 int print_octal(char *buffer, int *buffer_index, va_list arguments)
 {
-    unsigned int integer = va_arg(arguments, unsigned int);
-    return sprintf(buffer + *buffer_index, "%o", integer);
+	unsigned int integer = va_arg(arguments, unsigned int);
+
+	return (sprintf(buffer + *buffer_index, "%o", integer));
 }
 
 /**
@@ -55,8 +59,9 @@ int print_octal(char *buffer, int *buffer_index, va_list arguments)
  */
 int print_hex(char *buffer, int *buffer_index, va_list arguments)
 {
-    unsigned int integer = va_arg(arguments, unsigned int);
-    return sprintf(buffer + *buffer_index, "%x", integer);
+	unsigned int integer = va_arg(arguments, unsigned int);
+
+	return (sprintf(buffer + *buffer_index, "%x", integer));
 }
 
 /**
@@ -69,7 +74,8 @@ int print_hex(char *buffer, int *buffer_index, va_list arguments)
  */
 int print_upper_hex(char *buffer, int *buffer_index, va_list arguments)
 {
-    unsigned int integer = va_arg(arguments, unsigned int);
-    return sprintf(buffer + *buffer_index, "%X", integer);
+	unsigned int integer = va_arg(arguments, unsigned int);
+
+	return (sprintf(buffer + *buffer_index, "%X", integer));
 }
 

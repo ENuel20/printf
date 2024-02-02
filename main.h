@@ -11,6 +11,7 @@
 #define BUFFER_SIZE 1024
 
 int _printf(const char *format, ...);
+
 int print_character(char *buffer, int *buffer_index, va_list arguments);
 int print_string(char *buffer, int *buffer_index, va_list arguments);
 int print_integer(char *buffer, int *buffer_index, va_list arguments);
